@@ -40,8 +40,10 @@ class twitter:
             tweet_re_count = self.get_retweet_count(tweet)
             tweet_source = self.get_source(tweet)
             tweet_location = self.get_location(tweet)
+            tweet_favCount = self.get_favCount(tweet)
 
-            print(tweet_text)
+            print(tweet_favCount)
+            
     def get_retweet_or_not(self, query):
         if self.no_retweet:
             return query+ " -filter:retweets" 
@@ -75,9 +77,17 @@ class twitter:
             return place
         except :
             return None
+    
+    def get_favCount(self, tweet):
+        try: # if tweet is retweeted
+            fav_count = tweet.retweeted_status.favorite_count # get fav at main tweet
+            return fav_count
+        except:
+            fav_count = tweet.favorite_count
+            return fav_count
 
 if "__main__" == __name__:
     a = twitter()
-    
+
     a.get_tweet_by_query('#Covid', 'en', '2022-04-06')
 
