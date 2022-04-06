@@ -41,8 +41,8 @@ class twitter:
             tweet_source = self.get_source(tweet)
             tweet_location = self.get_location(tweet)
             tweet_favCount = self.get_favCount(tweet)
-
-            print(tweet_favCount)
+            # tweet_trend = self.get_trend()
+            print(tweet_text)
 
     def get_retweet_or_not(self, query):
         if self.no_retweet:
@@ -85,6 +85,9 @@ class twitter:
         except:
             fav_count = tweet.favorite_count
             return fav_count
+
+    def get_trend(self):
+        return self.api.get_place_trends(23424960)
 
 if "__main__" == __name__:
     a = twitter()
