@@ -20,8 +20,11 @@ class twitter:
         self.items = 100
         self.type = 'recent' # recent mixed popular
         self.mode = 'extended' # extended or compatibility mode
+        self.no_retweet = True # Don't get retweet
 
     def get_tweet_by_query(self, query, lang, day):
+
+        query = self.get_retweet_or_not(query)
 
         for tweet in tweepy.Cursor(self.api.search_tweets,
                             q = query,
@@ -36,10 +39,15 @@ class twitter:
             tweet_date = self.get_date(tweet)
             tweet_re_count = self.get_retweet_count(tweet)
             tweet_source = self.get_source(tweet)
-            
+            tweet_location = self.get_location(tweet)
 
-            print(tweet_source)
-    
+            print(tweet_text)
+    def get_retweet_or_not(self, query):
+        if self.no_retweet:
+            return query+ " -filter:retweets" 
+        else:
+            return query+ " filter:retweets" 
+
     def get_text(self, tweet):
         try: # for extended mode
             return tweet.full_text
@@ -57,7 +65,19 @@ class twitter:
     def get_source(self, tweet): # what type of tool that tweet or retweet
         return tweet.source 
 
+    def get_location(self, tweet): 
+        if type(tweet) is tweepy.models.Status:
+            tweet = tweet.__dict__
+        # get the place from the place data inside the tweet dictionary
+        place = tweet['user'].location
+        try:
+            place = place.split(', ')[-1].upper()
+            return place
+        except :
+            return None
+
 if "__main__" == __name__:
     a = twitter()
+    
     a.get_tweet_by_query('#Covid', 'en', '2022-04-06')
 
