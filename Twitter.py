@@ -43,7 +43,7 @@ class twitter:
             tweet_favCount = self.get_favCount(tweet)
 
             print(tweet_favCount)
-            
+
     def get_retweet_or_not(self, query):
         if self.no_retweet:
             return query+ " -filter:retweets" 
